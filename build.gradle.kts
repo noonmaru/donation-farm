@@ -17,8 +17,7 @@ repositories {
 dependencies {
     compileOnly(kotlin("stdlib-jdk8"))
     compileOnly("com.destroystokyo.paper:paper-api:1.16.2-R0.1-SNAPSHOT")
-    implementation("com.github.noonmaru:tap:3.0.0")
-    implementation("com.github.noonmaru:kommand:0.3")
+    implementation("com.github.noonmaru:twipe:1.0.1")
 
     testImplementation("junit:junit:4.13")
     testImplementation("org.mockito:mockito-core:3.3.3")
@@ -48,26 +47,8 @@ tasks {
             expand(project.properties)
         }
     }
-    create<Jar>("sourcesJar") {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
-    }
-}
-
-if (!hasProperty("debug")) {
-    tasks {
-        shadowJar {
-            relocate("com.github.noonmaru.kommand", "${rootProject.group}.${rootProject.name}.kommand")
-            relocate("com.github.noonmaru.tap", "${rootProject.group}.${rootProject.name}.tap")
-        }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("Sample") {
-            from(components["java"])
-            artifact(tasks["sourcesJar"])
-        }
+    create<Copy>("copyToServer") {
+        from(jar)
+        into("W:\\Servers\\donation-farm\\plugins")
     }
 }
